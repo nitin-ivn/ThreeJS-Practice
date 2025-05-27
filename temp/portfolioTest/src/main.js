@@ -16,25 +16,6 @@ let moveRight = false;
 
 let raycaster;
 
-
-const wallGeometry = new THREE.PlaneGeometry(1,1);
-const wallMaterial = new THREE.MeshBasicMaterial({color:"aqua"})
-
-
-const wall1 = new THREE.Mesh(wallGeometry,wallMaterial)
-wall1.position.y = 0
-// wall1.rotation.x = THREE.MathUtils.degToRad(90);
-
-const wall2 = new THREE.Mesh(wallGeometry,wallMaterial)
-wall2.position.x = 2
-
-
-const wall3 = new THREE.Mesh(wallGeometry,wallMaterial)
-wall3.position.y = -2
-
-const wall4 = new THREE.Mesh(wallGeometry,wallMaterial)
-wall4.position.x = -2
-
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(1,1,1,1),
   new THREE.MeshStandardMaterial({
@@ -172,12 +153,29 @@ const renderLoop = () => {
     direction.x = Number( moveRight ) - Number( moveLeft );
     direction.normalize();
 
-    if ( moveForward || moveBackward ) velocity.z -= direction.z * 40.0 * delta;
-    if ( moveLeft || moveRight ) velocity.x -= direction.x * 40.0 * delta;
 
+    if(moveForward || moveBackward){
+      velocity.z = 0;
+      velocity.z -= direction.z * 400.0 * delta;
+      controls.moveForward(-velocity.z *  delta)
+    }
+    
+    if(moveLeft || moveRight){
+      velocity.x = 0;
+      velocity.x -= direction.x * 400.0 * delta;
+      controls.moveRight(-velocity.x *  delta)
+    }
+    
 
-    controls.moveRight( - velocity.x * delta );
-    controls.moveForward( - velocity.z * delta );
+    // if ( moveForward || moveBackward ) {
+    //   velocity.z -= direction.z * 40.0 * delta;
+    // }
+    // if ( moveLeft || moveRight ) {
+    //   velocity.x -= direction.x * 40.0 * delta;
+    // }
+
+    // controls.moveRight( - velocity.x * delta );
+    // controls.moveForward( - velocity.z * delta );
 
     controls.object.position.y += ( velocity.y * delta );
   }
